@@ -5,7 +5,7 @@ import com.example.springmodulithkickstart.user.api.RegisterUserDto
 import com.example.springmodulithkickstart.user.api.dto.LoginResponse
 import com.example.springmodulithkickstart.user.infrastructure.AuthenticationService
 import com.example.springmodulithkickstart.user.infrastructure.db.User
-import com.example.springmodulithkickstart.user.security.jwt.JwtService
+import com.example.springmodulithkickstart.user.infrastructure.jwt.JwtService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

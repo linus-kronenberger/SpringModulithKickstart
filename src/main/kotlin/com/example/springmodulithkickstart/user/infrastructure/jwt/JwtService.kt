@@ -1,4 +1,4 @@
-package com.example.springmodulithkickstart.user.security.jwt
+package com.example.springmodulithkickstart.user.infrastructure.jwt
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts

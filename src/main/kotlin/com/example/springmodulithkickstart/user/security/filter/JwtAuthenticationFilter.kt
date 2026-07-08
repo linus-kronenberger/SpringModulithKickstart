@@ -1,6 +1,6 @@
 package com.example.springmodulithkickstart.user.security.filter
 
-import com.example.springmodulithkickstart.user.security.jwt.JwtService
+import com.example.springmodulithkickstart.user.infrastructure.jwt.JwtService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
