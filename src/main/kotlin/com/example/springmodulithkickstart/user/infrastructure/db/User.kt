@@ -17,9 +17,9 @@ import java.util.Date
 @Entity
 class User : UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false)
-    var id: Int? = null
+    var id: String? = null
 
     @Column(nullable = false)
     var fullName: String = ""
