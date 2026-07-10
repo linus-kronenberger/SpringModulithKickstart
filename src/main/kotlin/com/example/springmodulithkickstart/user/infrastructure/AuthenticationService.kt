@@ -1,7 +1,7 @@
 package com.example.springmodulithkickstart.user.infrastructure
 
-import com.example.springmodulithkickstart.user.api.LoginUserDto
-import com.example.springmodulithkickstart.user.api.RegisterUserDto
+import com.example.springmodulithkickstart.user.api.dto.LoginUserDto
+import com.example.springmodulithkickstart.user.api.dto.RegisterUserDto
 import com.example.springmodulithkickstart.user.infrastructure.db.User
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

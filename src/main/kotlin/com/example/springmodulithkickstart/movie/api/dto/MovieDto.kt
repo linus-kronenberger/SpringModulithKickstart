@@ -2,7 +2,7 @@ package com.example.springmodulithkickstart.movie.api.dto
 
 import org.jetbrains.annotations.NotNull
 
-class MovieDTO {
+class MovieDto {
     @NotNull
     var title: String? = null
     @NotNull
