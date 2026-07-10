@@ -11,15 +11,12 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
-import org.springframework.web.servlet.HandlerExceptionResolver
 import java.io.IOException
-
 
 @Component
 class JwtAuthenticationFilter(
     private val jwtService: JwtService,
     private val userDetailsService: UserDetailsService,
-    private val handlerExceptionResolver: HandlerExceptionResolver
 ) : OncePerRequestFilter() {
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
@@ -56,7 +53,9 @@ class JwtAuthenticationFilter(
 
             filterChain.doFilter(request, response)
         } catch (exception: Exception) {
-            handlerExceptionResolver.resolveException(request, response, null, exception)
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            response.writer.write("The token is either invalid or expired.")
+            response.writer.flush()
         }
     }
 }
