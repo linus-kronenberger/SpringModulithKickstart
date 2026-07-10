@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull
 
 class MovieDTO {
     @NotNull
-    var movieTitle: String? = null
+    var title: String? = null
     @NotNull
-    var movieDescription: String? = null
+    var description: String? = null
 }
