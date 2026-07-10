@@ -1,5 +1,6 @@
 package com.example.springmodulithkickstart.movie.domain
 
+import com.example.springmodulithkickstart.movie.api.dto.MovieDTO
 import com.example.springmodulithkickstart.movie.infrastructure.db.Movie
 
 /*
@@ -11,5 +12,10 @@ interface MovieService {
     This method takes the movieTitle and movieDescription
     for a new movie in order to store it.
      */
-    fun registerNewMovie(movieTitle: String?, movieDescription: String?){};
+    fun registerNewMovie(movieTitle: String?, movieDescription: String?);
+
+    /*
+   This method returns all movies from the persistence layer.
+    */
+    fun retrieveAllMovies() : List<MovieDTO>;
 }
