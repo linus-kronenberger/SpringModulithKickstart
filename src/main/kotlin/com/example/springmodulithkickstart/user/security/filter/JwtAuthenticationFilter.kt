@@ -5,6 +5,8 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -17,6 +19,7 @@ import java.io.IOException
 class JwtAuthenticationFilter(
     private val jwtService: JwtService,
     private val userDetailsService: UserDetailsService,
+    private val logger: Logger = LoggerFactory.getLogger(JwtAuthenticationFilter::class.java)
 ) : OncePerRequestFilter() {
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
@@ -53,6 +56,7 @@ class JwtAuthenticationFilter(
 
             filterChain.doFilter(request, response)
         } catch (exception: Exception) {
+            logger.error("Error on processing bearer token: e={}", exception.message);
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.writer.write("The token is either invalid or expired.")
             response.writer.flush()
