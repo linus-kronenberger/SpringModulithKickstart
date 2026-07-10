@@ -1,6 +1,6 @@
 package com.example.springmodulithkickstart.movie.infrastructure.mapper
 
-import com.example.springmodulithkickstart.movie.api.dto.MovieDTO
+import com.example.springmodulithkickstart.movie.api.dto.MovieDto
 import com.example.springmodulithkickstart.movie.infrastructure.db.Movie
 import org.springframework.stereotype.Component
 import kotlin.reflect.KClass
@@ -25,7 +25,7 @@ class MovieDTOMapper {
         }
         return mappedInstance
     }
-    fun mapToMovieDTO(movie: Movie): MovieDTO {
-        return mapBasedOnPropertyNames(movie, MovieDTO::class)
+    fun mapToMovieDTO(movie: Movie): MovieDto {
+        return mapBasedOnPropertyNames(movie, MovieDto::class)
     }
 }

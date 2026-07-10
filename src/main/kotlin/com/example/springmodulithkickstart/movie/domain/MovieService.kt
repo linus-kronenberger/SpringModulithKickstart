@@ -1,7 +1,6 @@
 package com.example.springmodulithkickstart.movie.domain
 
-import com.example.springmodulithkickstart.movie.api.dto.MovieDTO
-import com.example.springmodulithkickstart.movie.infrastructure.db.Movie
+import com.example.springmodulithkickstart.movie.api.dto.MovieDto
 
 /*
     This service carries all functionality for dealing with the movie domain.
@@ -17,5 +16,5 @@ interface MovieService {
     /*
    This method returns all movies from the persistence layer.
     */
-    fun retrieveAllMovies() : List<MovieDTO>;
+    fun retrieveAllMovies() : List<MovieDto>;
 }

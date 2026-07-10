@@ -1,6 +1,6 @@
 package com.example.springmodulithkickstart.movie.infrastructure
 
-import com.example.springmodulithkickstart.movie.api.dto.MovieDTO
+import com.example.springmodulithkickstart.movie.api.dto.MovieDto
 import com.example.springmodulithkickstart.movie.domain.MovieService
 import com.example.springmodulithkickstart.movie.infrastructure.db.Movie
 import com.example.springmodulithkickstart.movie.infrastructure.mapper.MovieDTOMapper
@@ -24,7 +24,7 @@ class MovieServiceImpl : MovieService {
         movieRepository.save(newMovie);
     }
 
-    override fun retrieveAllMovies() : List<MovieDTO> {
+    override fun retrieveAllMovies() : List<MovieDto> {
         val movies : List<Movie> = movieRepository.findAll().toList();
         return movies.map {
             movieDTOMapper.mapToMovieDTO(it)

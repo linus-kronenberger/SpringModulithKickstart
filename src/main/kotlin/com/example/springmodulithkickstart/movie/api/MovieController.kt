@@ -1,6 +1,6 @@
 package com.example.springmodulithkickstart.movie.api
 
-import com.example.springmodulithkickstart.movie.api.dto.MovieDTO
+import com.example.springmodulithkickstart.movie.api.dto.MovieDto
 import com.example.springmodulithkickstart.movie.domain.MovieService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/movie")
 class MovieController(private val movieService: MovieService, service: MovieService, movieService1: MovieService) {
     @PostMapping("/new")
-    fun registerMovie(@RequestBody movieDTO: MovieDTO): ResponseEntity<String> {
+    fun registerMovie(@RequestBody movieDTO: MovieDto): ResponseEntity<String> {
         movieService.registerNewMovie(movieDTO.title, movieDTO.description)
         return ResponseEntity.ok("Successfully registered new movie: '${movieDTO.title}'");
     }
 
     @GetMapping("/all")
-    fun getAllMovies(): List<MovieDTO> {
+    fun getAllMovies(): List<MovieDto> {
         return movieService.retrieveAllMovies();
     }
 }
