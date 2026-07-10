@@ -14,7 +14,7 @@ class MovieDTOMapper {
     maps an object to another type of object based on equal field names.
     Notice that this only works if the field names to map are equal.
      */
-    fun <O, M : Any> mapBasedOnAttributNames(oldObject : O, mappedClass : KClass<M>) : M {
+    fun <O, M : Any> mapBasedOnPropertyNames(oldObject : O, mappedClass : KClass<M>) : M {
         val mappedInstance = mappedClass.createInstance()
         for(property in oldObject!!::class.memberProperties) {
             val value = property.getter.call(oldObject)
@@ -26,6 +26,6 @@ class MovieDTOMapper {
         return mappedInstance
     }
     fun mapToMovieDTO(movie: Movie): MovieDTO {
-        return mapBasedOnAttributNames(movie, MovieDTO::class)
+        return mapBasedOnPropertyNames(movie, MovieDTO::class)
     }
 }
