@@ -4,7 +4,7 @@ import com.example.springmodulithkickstart.movie.api.dto.MovieDto
 import com.example.springmodulithkickstart.movie.domain.MovieService
 import com.example.springmodulithkickstart.shared.event.MovieCreatedEvent
 import com.example.springmodulithkickstart.movie.infrastructure.db.Movie
-import com.example.springmodulithkickstart.movie.infrastructure.mapper.MovieDTOMapper
+import com.example.springmodulithkickstart.movie.infrastructure.mapper.MovieDtoMapper
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service
 class MovieServiceImpl : MovieService {
 
     private val movieRepository : MovieRepository;
-    private val movieDTOMapper : MovieDTOMapper;
+    private val movieDTOMapper : MovieDtoMapper;
     private val eventPublisher : ApplicationEventPublisher;
 
-    constructor(movieRepository: MovieRepository, movieDTOMapper: MovieDTOMapper, eventPublisher: ApplicationEventPublisher) {
+    constructor(movieRepository: MovieRepository, movieDTOMapper: MovieDtoMapper, eventPublisher: ApplicationEventPublisher) {
         this.movieRepository = movieRepository;
         this.movieDTOMapper = movieDTOMapper;
         this.eventPublisher = eventPublisher;
