@@ -1,36 +1,45 @@
-package com.example.springmodulithkickstart.user.security.filter
+package com.example.springmodulithkickstart.user.infrastructure.security
 
-import com.example.springmodulithkickstart.user.infrastructure.jwt.JwtService
+import com.example.springmodulithkickstart.user.domain.JwtService
+import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
+import jakarta.servlet.ServletRequest
+import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
-import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
 @Component
 class JwtAuthenticationFilter(
     private val jwtService: JwtService,
-    private val userDetailsService: UserDetailsService,
-    private val logger: Logger = LoggerFactory.getLogger(JwtAuthenticationFilter::class.java)
-) : OncePerRequestFilter() {
+    private val userDetailsService: UserDetailsService
+) : Filter {
+
+    private val logger = LoggerFactory.getLogger(JwtAuthenticationFilter::class.java)
+
     @Throws(ServletException::class, IOException::class)
-    override fun doFilterInternal(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        filterChain: FilterChain
-    ) {
-        val authHeader = request.getHeader("Authorization")
+    override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
+        val httpRequest = request as HttpServletRequest
+        val httpResponse = response as HttpServletResponse
+
+        val alreadyFiltered = httpRequest.getAttribute(FILTERED_ATTRIBUTE) != null
+        if (alreadyFiltered) {
+            chain.doFilter(request, response)
+            return
+        }
+        httpRequest.setAttribute(FILTERED_ATTRIBUTE, true)
+
+        val authHeader = httpRequest.getHeader("Authorization")
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response)
+            chain.doFilter(request, response)
             return
         }
 
@@ -49,17 +58,21 @@ class JwtAuthenticationFilter(
                         userDetails.authorities
                     )
 
-                    authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
+                    authToken.details = WebAuthenticationDetailsSource().buildDetails(httpRequest)
                     SecurityContextHolder.getContext().authentication = authToken
                 }
             }
 
-            filterChain.doFilter(request, response)
+            chain.doFilter(request, response)
         } catch (exception: Exception) {
             logger.error("Error on processing bearer token: e={}", exception.message);
-            response.status = HttpServletResponse.SC_UNAUTHORIZED
-            response.writer.write("The token is either invalid or expired.")
-            response.writer.flush()
+            httpResponse.status = HttpServletResponse.SC_UNAUTHORIZED
+            httpResponse.writer.write("The token is either invalid or expired.")
+            httpResponse.writer.flush()
         }
+    }
+
+    companion object {
+        private const val FILTERED_ATTRIBUTE = "com.example.springmodulithkickstart.user.infrastructure.security.JwtAuthenticationFilter.FILTERED"
     }
 }
