@@ -2,19 +2,24 @@ package com.example.springmodulithkickstart.movie.domain
 
 import com.example.springmodulithkickstart.movie.api.dto.MovieDto
 
-/*
-    This service carries all functionality for dealing with the movie domain.
-    It communicates between the presentation layer and the persistence layer.
-*/
+/**
+ * Service interface for movie-related operations.
+ * Handles communication between the presentation layer and the persistence layer
+ * for the movie domain.
+ */
 interface MovieService {
-    /*
-    This method takes the movieTitle and movieDescription
-    for a new movie in order to store it.
+    /**
+     * Registers a new movie with the given title and description.
+     *
+     * @param movieTitle the title of the new movie, may be null
+     * @param movieDescription a description of the new movie, may be null
      */
     fun registerNewMovie(movieTitle: String?, movieDescription: String?);
 
-    /*
-   This method returns all movies from the persistence layer.
-    */
+    /**
+     * Retrieves all movies from the persistence layer.
+     *
+     * @return a list of all movies as [MovieDto] objects
+     */
     fun retrieveAllMovies() : List<MovieDto>;
 }
