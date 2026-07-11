@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository
 import java.util.Optional
 
 @Repository
-interface UserRepository : CrudRepository<User, Int> {
+interface UserRepository : CrudRepository<User, String> {
     fun findByEmail(email: String): Optional<User>
 }
