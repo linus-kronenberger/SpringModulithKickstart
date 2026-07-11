@@ -5,13 +5,20 @@ services:
       context: .
     container_name: app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/mydb
       - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=your_password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD:-your_password}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
       - ACTIVE_PROFILE=prod
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - '8080:8080'
   db:
     image: 'postgres:17-alpine'
     container_name: db
@@ -19,5 +26,26 @@ services:
       - '5432:5432'
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=your_password
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-your_password}
       - POSTGRES_DB=mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: 'redis:7-alpine'
+    container_name: redis
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
