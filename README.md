@@ -154,6 +154,11 @@ mvn clean install
 mvn spring-boot:run
 ```
 
+### Run Flyway migrations manually
+```bash
+mvn flyway:migrate -Dflyway.url=jdbc:postgresql://localhost:5432/mydb -Dflyway.user=postgres -Dflyway.password=your_password
+```
+
 ## API Endpoints
 
 ### User Module (`/auth`)
