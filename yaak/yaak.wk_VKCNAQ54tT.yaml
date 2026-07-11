@@ -1,0 +1,15 @@
+type: workspace
+model: workspace
+id: wk_VKCNAQ54tT
+createdAt: 2026-07-11T12:23:35.021988
+updatedAt: 2026-07-11T12:23:35.021989
+authentication: {}
+authenticationType: null
+description: ''
+headers: []
+name: http-templates
+encryptionKeyChallenge: null
+settingValidateCertificates: true
+settingFollowRedirects: true
+settingRequestTimeout: 0
+settingDnsOverrides: []

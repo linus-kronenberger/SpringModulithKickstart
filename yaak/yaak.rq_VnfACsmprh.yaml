@@ -1,0 +1,19 @@
+type: http_request
+model: http_request
+id: rq_VnfACsmprh
+createdAt: 2026-07-10T12:37:06.759844
+updatedAt: 2026-07-11T12:24:26.085640
+workspaceId: wk_VKCNAQ54tT
+folderId: fl_xkmPP4mABy
+authentication:
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsaW51cy5rcm9uZW5iZXJnZXJAaWNsb3VkLmNvbSIsImlhdCI6MTc4MzY4Nzg3OSwiZXhwIjoxNzgzNjkxNDc5fQ.hlx_U4-yiYswOTD5v60Ko4x5n-gel0nyGZbEmvWp-Lo
+authenticationType: bearer
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: Swagger
+sortPriority: 0.0
+url: localhost:8080/swagger
+urlParameters: []

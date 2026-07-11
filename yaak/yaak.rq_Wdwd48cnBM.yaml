@@ -1,0 +1,27 @@
+type: http_request
+model: http_request
+id: rq_Wdwd48cnBM
+createdAt: 2026-07-10T21:37:25.582653
+updatedAt: 2026-07-11T12:24:52.952603
+workspaceId: wk_VKCNAQ54tT
+folderId: fl_EGgdRVH386
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "email" : "admin@admin.com",
+      "password" : "admin"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: CzQwvMNCB7
+method: POST
+name: Admin Login
+sortPriority: 0.0
+url: localhost:8080/auth/login
+urlParameters: []

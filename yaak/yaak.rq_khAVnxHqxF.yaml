@@ -1,0 +1,29 @@
+type: http_request
+model: http_request
+id: rq_khAVnxHqxF
+createdAt: 2026-07-09T00:15:32.236893
+updatedAt: 2026-07-11T12:24:47.817025
+workspaceId: wk_VKCNAQ54tT
+folderId: fl_hjebxrECdm
+authentication:
+  disabled: false
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsaW51cy5rcm9uZW5iZXJnZXJAaWNsb3VkLmNvbSIsImlhdCI6MTc4MzcxNDEyNywiZXhwIjoxNzgzNzE3NzI3fQ.Mi7j92zQ5BrSYvRYgrNrVBqhG8I1pS0v7JsNWfwsD30
+authenticationType: bearer
+body:
+  text: |-
+    {
+      "title" : "test",
+      "description" : "test"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: tDURATIxxI
+method: POST
+name: New Movie
+sortPriority: 0.0
+url: localhost:8080/movie/new
+urlParameters: []

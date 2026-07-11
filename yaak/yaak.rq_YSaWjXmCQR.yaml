@@ -1,0 +1,19 @@
+type: http_request
+model: http_request
+id: rq_YSaWjXmCQR
+createdAt: 2026-07-10T11:22:58.620117
+updatedAt: 2026-07-11T12:23:57.443519
+workspaceId: wk_VKCNAQ54tT
+folderId: null
+authentication:
+  token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE3ODM3MTk2NzAsImV4cCI6MTc4MzcyMzI3MH0.72iGQuU142lFh-_S2nyX22a6eqJJNQohd_LY7p_ajSg
+authenticationType: bearer
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: Actuator
+sortPriority: 6000.0
+url: localhost:8080/actuator
+urlParameters: []

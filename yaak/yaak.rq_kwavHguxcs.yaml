@@ -1,0 +1,28 @@
+type: http_request
+model: http_request
+id: rq_kwavHguxcs
+createdAt: 2026-07-08T20:51:57.493537
+updatedAt: 2026-07-11T12:24:52.957637
+workspaceId: wk_VKCNAQ54tT
+folderId: fl_EGgdRVH386
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "email" : "linus.kronenberger@icloud.com",
+      "password" : "test",
+      "fullName" : "Linus Kronenberger"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: asbEk6dc3A
+method: POST
+name: Register
+sortPriority: 1000.0
+url: localhost:8080/auth/signup
+urlParameters: []

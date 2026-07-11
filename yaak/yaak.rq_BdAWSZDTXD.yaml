@@ -1,0 +1,19 @@
+type: http_request
+model: http_request
+id: rq_BdAWSZDTXD
+createdAt: 2026-07-10T12:50:48.900835
+updatedAt: 2026-07-11T12:24:26.088834
+workspaceId: wk_VKCNAQ54tT
+folderId: fl_xkmPP4mABy
+authentication:
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsaW51cy5rcm9uZW5iZXJnZXJAaWNsb3VkLmNvbSIsImlhdCI6MTc4MzY4ODAyMCwiZXhwIjoxNzgzNjkxNjIwfQ.5C5hu6q0ItocZsbjgEYPpicgZasUvYnzmYqOT6ECRZU
+authenticationType: bearer
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: OpenAPI
+sortPriority: 1000.0
+url: localhost:8080/api-docs
+urlParameters: []
