@@ -9,7 +9,7 @@ import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.memberProperties
 
 @Component
-class MovieDTOMapper {
+class MovieDtoMapper {
     /*
     maps an object to another type of object based on equal field names.
     Notice that this only works if the field names to map are equal.
