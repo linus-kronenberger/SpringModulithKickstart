@@ -1,7 +1,7 @@
 package com.example.springmodulithkickstart.review.api
 
-import com.example.springmodulithkickstart.review.api.dto.CreateReviewRequest
-import com.example.springmodulithkickstart.review.api.dto.ReviewResponse
+import com.example.springmodulithkickstart.review.api.dto.CreateReviewRequestDto
+import com.example.springmodulithkickstart.review.api.dto.ReviewResponseDto
 import com.example.springmodulithkickstart.review.domain.ReviewService
 import com.example.springmodulithkickstart.user.infrastructure.db.User
 import org.springframework.http.HttpStatus
@@ -19,9 +19,9 @@ class ReviewController(
 ) {
     @PostMapping
     fun createReview(
-        @RequestBody request: CreateReviewRequest,
+        @RequestBody request: CreateReviewRequestDto,
         authentication: Authentication
-    ): ResponseEntity<ReviewResponse> {
+    ): ResponseEntity<ReviewResponseDto> {
         val user = authentication.principal as User
         val response = reviewService.createReview(request, user.id!!)
         return ResponseEntity.status(HttpStatus.CREATED).body(response)

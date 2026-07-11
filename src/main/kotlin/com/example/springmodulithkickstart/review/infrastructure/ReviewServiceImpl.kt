@@ -1,7 +1,7 @@
 package com.example.springmodulithkickstart.review.infrastructure
 
-import com.example.springmodulithkickstart.review.api.dto.CreateReviewRequest
-import com.example.springmodulithkickstart.review.api.dto.ReviewResponse
+import com.example.springmodulithkickstart.review.api.dto.CreateReviewRequestDto
+import com.example.springmodulithkickstart.review.api.dto.ReviewResponseDto
 import com.example.springmodulithkickstart.review.domain.ReviewService
 import com.example.springmodulithkickstart.review.infrastructure.db.Review
 import com.example.springmodulithkickstart.shared.event.MovieCreatedEvent
@@ -35,7 +35,7 @@ class ReviewServiceImpl(
         log.info("Reviews created for all {} users for movie '{}'.", users.count(), event.title)
     }
 
-    override fun createReview(request: CreateReviewRequest, userId: String): ReviewResponse {
+    override fun createReview(request: CreateReviewRequestDto, userId: String): ReviewResponseDto {
         val user = userRepository.findById(userId).orElseThrow { RuntimeException("User not found") }
         val existingReview = reviewRepository.findByMovieIdAndReviewer_Id(request.movieId, userId)
         val review = existingReview.orElseGet { Review() }
@@ -44,7 +44,7 @@ class ReviewServiceImpl(
         review.reviewText = request.reviewText
         review.rating = request.rating
         val saved = reviewRepository.save(review)
-        return ReviewResponse(
+        return ReviewResponseDto(
             id = saved.id,
             movieId = saved.movieId,
             reviewerId = saved.reviewer?.id,
