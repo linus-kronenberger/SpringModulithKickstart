@@ -85,7 +85,7 @@ jobs:
             Dockerfile docker-compose.yml
 
       - name: Copy to VPS
-        uses: appleboy/scp-action@v1.5.0
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
