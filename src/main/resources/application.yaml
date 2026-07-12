@@ -6,11 +6,6 @@ spring:
     name: SpringModulithKickstart
   profiles:
     active: ${ACTIVE_PROFILE:dev}
-springdoc:
-  swagger-ui:
-    path: /admin/swagger
-  api-docs:
-    path: /admin/api-docs
 management:
   endpoints:
     web:

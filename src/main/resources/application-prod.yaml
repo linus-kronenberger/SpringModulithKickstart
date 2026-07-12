@@ -31,6 +31,3 @@ security:
   jwt:
     secret-key: ${JWT_SECRET_KEY}
     expiration-time: ${JWT_EXPIRATION_TIME:3600000}
-springdoc:
-  swagger-ui:
-    enabled: false

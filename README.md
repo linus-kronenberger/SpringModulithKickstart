@@ -48,7 +48,6 @@ Via the ApplicationEventPublisher, the MovieCreatedEvent informs the ReviewModul
 
 **Web & API**
 - **Spring Web** (Servlet stack) – REST API
-- **SpringDoc OpenAPI 2.8.6** – Swagger UI at `/admin/swagger/`, OpenAPI JSON at `/admin/api-docs`
 
 **Database & Persistence**
 - **H2** (in-memory) – Development database
@@ -80,7 +79,7 @@ Spring profiles switch between development and production:
 | Database | H2 in-memory | PostgreSQL |
 | Caching | ConcurrentMap | Redis |
 
-## Generated Admin Account
+## Generated Admin Account (in dev)
 
 | Field    | Value             |
 |----------|-------------------|
@@ -94,7 +93,7 @@ The admin account is automatically created on startup via `AdminInitializer`. Yo
 The application uses a simple role system with two roles:
 
 - **USER** — default role for newly registered users
-- **ADMIN** — has access to protected endpoints (e.g. Swagger, Actuator)
+- **ADMIN** — has access to protected endpoints (e.g. Actuator)
 
 The role is stored as an enum string in the `users` table and included as a `role` claim in the JWT token.
 
@@ -138,11 +137,13 @@ Movie management is handled by `MovieController`. Both endpoints require a valid
 
 - **GET `/movie/all`** -- Retrieves all registered movies. Returns a list of `MovieDTO` objects, each containing `title` and `description`.
 
-### Review Module
+### Review Module (`/review`)
 
-A `ReviewController` stub exists but currently exposes no endpoints. This module is a placeholder for future review functionality.
+Reviews are managed by `ReviewController`. Requires a valid JWT in the `Authorization` header.
 
-### Actuator & Swagger (Admin only, under `/admin/`)
+- **POST `/review`** -- Creates a new review. Expects a JSON body with `movieId`, and optionally `reviewText` and `rating`. Uses the authenticated user as the reviewer. Returns a `ReviewResponseDto` with HTTP `201 Created`.
+
+### Admin Endpoints (`/admin/`, ADMIN role required)
 
 These endpoints are grouped under the **`/admin/`** path and require an `ADMIN` JWT:
 
@@ -151,8 +152,6 @@ These endpoints are grouped under the **`/admin/`** path and require an `ADMIN` 
 | `GET /admin/actuator/health` | Health check |
 | `GET /admin/actuator/info` | App info |
 | `GET /admin/actuator/modulith` | Modulith module structure |
-| `GET /admin/swagger/*` | Swagger UI |
-| `GET /admin/api-docs` | OpenAPI JSON specification |
 
 ### Register (new user)
 ```bash
@@ -202,17 +201,16 @@ curl -X GET 'localhost:8080/movie/all' \
   --header 'Authorization: Bearer <JWT_TOKEN>'
 ```
 
-### Swagger UI
+### Create Review
 ```bash
-# Requires admin JWT — open in browser or use curl:
-curl -X GET 'localhost:8080/admin/swagger/index.html' \
-  --header 'Authorization: Bearer <ADMIN_JWT>'
-```
-
-### OpenAPI Docs
-```bash
-curl -X GET 'localhost:8080/admin/api-docs' \
-  --header 'Authorization: Bearer <ADMIN_JWT>'
+curl -X POST 'localhost:8080/review' \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer <JWT_TOKEN>' \
+  --data '{
+  "movieId" : "<MOVIE_ID>",
+  "reviewText" : "Great movie!",
+  "rating" : 5
+}'
 ```
 
 ### Actuator Health
@@ -344,11 +342,12 @@ PostgreSQL data persists across deploys via a Docker volume (`postgres_data`).
 
 All endpoints were tested with [Yaak](https://yaak.app/).  
 Pre-built Yaak templates for testing the APIs can be found in the `/yaak` folder.
+On the vps, you can access the endpoints by following this path naming pattern: `<YOUR_VPS_IP>:8080/endpoint-path`
 
 ## Contributing
 
 This is **my** personal Spring Boot preconfiguration.  
-If you see a useful tool or architecture improvement that fits in here – **feel free to open an issue or submit a PR**!
+If you see a useful tool or architecture improvement that fits in here – **feel free to open an issue or submit a PR 🤔😃**!
 
 ## Linting
 ```bash
