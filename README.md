@@ -231,9 +231,32 @@ This endpoint returns the module structure including module and aggregate mappin
 
 ## Deployment
 
-The pipeline (`.github/workflows/deploy.yml`) automatically builds and deploys to your VPS on every push to `main` or `production`.
+The pipeline (`.github/workflows/deploy.yml`) automatically builds and deploys to your VPS on every push to `main`.
 
-### 1. SSH Key Set-Up
+### 1. VPS Setup
+
+Log in as `root` via SSH or the hoster's console and run:
+
+```bash
+# Create deploy user
+adduser deploy
+usermod -aG sudo deploy
+
+# Allow port 8080
+ufw allow 22/tcp
+ufw allow 8080/tcp
+ufw --force enable
+
+# Install Docker
+curl -fsSL https://get.docker.com | sh
+usermod -aG docker deploy
+
+# Create app directory
+mkdir -p /home/deploy/app
+chown deploy:deploy /home/deploy/app
+```
+
+### 2. SSH Key Set-Up
 
 Generate a key pair on your local machine (if you don't have one yet):
 
@@ -241,42 +264,38 @@ Generate a key pair on your local machine (if you don't have one yet):
 ssh-keygen -t rsa -b 4096 -f ~/.ssh/vps_deploy
 ```
 
-Copy the public key to your VPS:
+This creates `~/.ssh/vps_deploy` (private key) and `~/.ssh/vps_deploy.pub` (public key).  
+The **private key** will later be stored as `VPS_SSH_KEY` in GitHub Secrets.
+
+### 3. Install the Public Key for `deploy`
+
+From your local machine:
 
 ```bash
-ssh-copy-id -i ~/.ssh/vps_deploy.pub ubuntu@<VPS_IP>
+sudo ssh-copy-id -i ~/.ssh/vps_deploy.pub deploy@<VPS_IP>
 ```
 
-Test the connection:
-```bash
-ssh -i ~/.ssh/vps_deploy ubuntu@<VPS_IP>
-```
-
-The **private key** (`~/.ssh/vps_deploy`) will be stored as `VPS_SSH_KEY` in GitHub Secrets.
-
-### 2. Initial VPS Setup (once)
-
-SSH into your VPS and run:
+If that doesn't work (e.g. `deploy` user has no password), log in as `root` and manually add the key:
 
 ```bash
-# Allow port 8080
-sudo ufw allow 22/tcp
-sudo ufw allow 8080/tcp
-sudo ufw --force enable
-
-# Install Docker
-curl -fsSL https://get.docker.com | sh
-sudo usermod -aG docker ubuntu
-
-# Create app directory
-mkdir -p /home/ubuntu/app
+ssh root@<VPS_IP>
+mkdir -p /home/deploy/.ssh
+echo "<content of ~/.ssh/vps_deploy.pub>" >> /home/deploy/.ssh/authorized_keys
+chmod 700 /home/deploy/.ssh
+chmod 600 /home/deploy/.ssh/authorized_keys
+chown -R deploy:deploy /home/deploy/.ssh
+exit
 ```
 
-Then **log out and back in** (to pick up the `docker` group).
+### 4. Test the Connection
 
-No Java or manual container setup needed – everything runs in Docker containers via Docker Compose.
+```bash
+ssh -i ~/.ssh/vps_deploy deploy@<VPS_IP>
+```
 
-### 3. GitHub Secrets
+Successful login → you're ready.
+
+### 5. GitHub Secrets
 
 Navigate to **GitHub → Settings → Secrets and variables → Actions** and add the following secrets.  
 All secrets are **required for production** — the defaults are only suitable for local development.
@@ -285,7 +304,7 @@ All secrets are **required for production** — the defaults are only suitable f
 |--------|-------------|
 | `VPS_HOST` | Public IP of your VPS |
 | `VPS_PORT` | SSH port (usually `22`) |
-| `VPS_USER` | SSH user (e.g. `ubuntu`) |
+| `VPS_USER` | SSH user (e.g. `deploy`) |
 | `VPS_SSH_KEY` | Content of the private SSH key (e.g. `~/.ssh/vps_deploy`) |
 | `DB_USER` | PostgreSQL user |
 | `DB_NAME` | PostgreSQL database name |

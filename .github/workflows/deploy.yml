@@ -2,7 +2,7 @@
 # Required GitHub Secrets:
 #   VPS_HOST          – Public IP of the VPS
 #   VPS_PORT          – SSH port (usually 22)
-#   VPS_USER          – SSH user (e.g. ubuntu)
+#   VPS_USER          – SSH user (e.g. deploy)
 #   VPS_SSH_KEY       – Private SSH key for VPS_USER
 #   DB_NAME           – PostgreSQL database name
 #   DB_USER           – PostgreSQL user
@@ -92,7 +92,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
           source: deploy.tar.gz
-          target: /home/ubuntu/
+          target: /home/deploy/
 
       - name: Deploy with Docker Compose
         uses: appleboy/ssh-action@v1.2.0
@@ -102,10 +102,10 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            mkdir -p /home/ubuntu/app
-            cd /home/ubuntu/app
-            tar xzf /home/ubuntu/deploy.tar.gz
-            rm /home/ubuntu/deploy.tar.gz
+            mkdir -p /home/deploy/app
+            cd /home/deploy/app
+            tar xzf /home/deploy/deploy.tar.gz
+            rm /home/deploy/deploy.tar.gz
             export DB_NAME="${{ secrets.DB_NAME }}"
             export DB_USER="${{ secrets.DB_USER }}"
             export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
