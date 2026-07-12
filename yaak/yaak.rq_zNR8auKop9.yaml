@@ -2,11 +2,11 @@ type: http_request
 model: http_request
 id: rq_zNR8auKop9
 createdAt: 2026-07-10T21:46:46.431921
-updatedAt: 2026-07-11T12:25:00.033649
+updatedAt: 2026-07-12T11:06:15.892140
 workspaceId: wk_VKCNAQ54tT
 folderId: fl_49GtESkwFJ
 authentication:
-  token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE3ODM3MTk2NzAsImV4cCI6MTc4MzcyMzI3MH0.72iGQuU142lFh-_S2nyX22a6eqJJNQohd_LY7p_ajSg
+  token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6ImxpbnVzLmtyb25lbmJlcmdlckBpY2xvdWQuY29tIiwiaWF0IjoxNzgzODQ3NjE2LCJleHAiOjE3ODM4NTEyMTZ9.rAtSilYqEm_t2xkfMXmvVubn6_yN1rtoHJJB8OrUFIU
 authenticationType: bearer
 body: {}
 bodyType: null
@@ -15,5 +15,5 @@ headers: []
 method: GET
 name: Modulith
 sortPriority: 0.0
-url: http://localhost:8080/actuator/modulith
+url: localhost:8080/admin/actuator/modulith
 urlParameters: []

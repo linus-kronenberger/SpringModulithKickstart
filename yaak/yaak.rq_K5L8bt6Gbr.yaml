@@ -1,8 +1,8 @@
 type: http_request
 model: http_request
-id: rq_YSaWjXmCQR
-createdAt: 2026-07-10T11:22:58.620117
-updatedAt: 2026-07-12T11:17:41.436389
+id: rq_K5L8bt6Gbr
+createdAt: 2026-07-12T11:15:27.006715
+updatedAt: 2026-07-12T11:18:15.311409
 workspaceId: wk_VKCNAQ54tT
 folderId: fl_fSVPdm9tqF
 authentication:
@@ -13,7 +13,7 @@ bodyType: null
 description: ''
 headers: []
 method: GET
-name: Health
+name: Monolith Actuator
 sortPriority: 0.0
-url: localhost:8080/admin/actuator/health
+url: localhost:8080/admin/actuator/modulith
 urlParameters: []

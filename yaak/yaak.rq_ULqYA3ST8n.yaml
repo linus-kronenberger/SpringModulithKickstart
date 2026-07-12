@@ -1,0 +1,29 @@
+type: http_request
+model: http_request
+id: rq_ULqYA3ST8n
+createdAt: 2026-07-12T11:08:08.747880
+updatedAt: 2026-07-12T11:17:07.828099
+workspaceId: wk_VKCNAQ54tT
+folderId: fl_kY7MVWWHfo
+authentication:
+  token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQURNSU4iLCJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJpYXQiOjE3ODM4NTQ5ODAsImV4cCI6MTc4Mzg1ODU4MH0.2-oCdMVfxJBf0rsw-lyRlG7pMZjG05DYgS7-YRa5W3o
+authenticationType: bearer
+body:
+  text: |-
+    {
+      "movieId" : "a0000001-0000-0000-0000-000000000002",
+      "reviewText" : "Great movie!",
+      "rating" : 5
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: RC5Bs7e64F
+method: POST
+name: Create Review
+sortPriority: 1000.0
+url: localhost:8080/review
+urlParameters: []

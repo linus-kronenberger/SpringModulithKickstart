@@ -2,11 +2,12 @@ type: http_request
 model: http_request
 id: rq_SdFxBbiX3Y
 createdAt: 2026-07-08T20:51:46.704901
-updatedAt: 2026-07-11T12:24:52.960329
+updatedAt: 2026-07-12T11:06:30.384450
 workspaceId: wk_VKCNAQ54tT
 folderId: fl_EGgdRVH386
 authentication:
-  token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6ImxpbnVzLmtyb25lbmJlcmdlckBpY2xvdWQuY29tIiwiaWF0IjoxNzgzNzE5NjM1LCJleHAiOjE3ODM3MjMyMzV9.EF5-I0k1LmW9-UAWyNZV8-o8P5a-9EffXLLicH4fWgU
+  disabled: true
+  token: ''
 authenticationType: bearer
 body:
   text: |-
