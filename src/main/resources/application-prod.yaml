@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/mydb
-    username: postgres
-    password: your_password
+    url: jdbc:postgresql://localhost:5432/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     hikari:
       maximum-pool-size: 10
   flyway:
@@ -23,6 +23,14 @@ spring:
       timeout: 500
   cache:
     type: redis
+admin:
+  full-name: ${ADMIN_FULL_NAME}
+  email: ${ADMIN_MAIL}
+  password: ${ADMIN_PASSWORD}
+security:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    expiration-time: ${JWT_EXPIRATION_TIME:3600000}
 springdoc:
   swagger-ui:
     enabled: false

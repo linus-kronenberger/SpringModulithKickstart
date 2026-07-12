@@ -291,6 +291,7 @@ All secrets are **required for production** — the defaults are only suitable f
 | `DB_NAME` | PostgreSQL database name |
 | `DB_PASSWORD` | PostgreSQL password |
 | `ACTIVE_PROFILE` | Spring active profile (`prod`) |
+| `ADMIN_FULL_NAME` | Admin full name |
 | `ADMIN_MAIL` | Admin account email |
 | `ADMIN_PASSWORD` | Admin account password |
 | `JWT_SECRET_KEY` | Base64-encoded HMAC-SHA256 key for JWT signing |

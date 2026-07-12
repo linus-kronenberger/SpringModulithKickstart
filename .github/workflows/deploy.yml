@@ -1,10 +1,20 @@
 # ============================================================
 # Required GitHub Secrets:
-#   VPS_HOST      – Public IP of the VPS
-#   VPS_PORT      – SSH port (usually 22)
-#   VPS_USER      – SSH user (e.g. ubuntu)
-#   VPS_SSH_KEY   – Private SSH key for VPS_USER
-#   DB_PASSWORD   – PostgreSQL password
+#   VPS_HOST          – Public IP of the VPS
+#   VPS_PORT          – SSH port (usually 22)
+#   VPS_USER          – SSH user (e.g. ubuntu)
+#   VPS_SSH_KEY       – Private SSH key for VPS_USER
+#   DB_NAME           – PostgreSQL database name
+#   DB_USER           – PostgreSQL user
+#   DB_PASSWORD       – PostgreSQL password
+#   ACTIVE_PROFILE    – Spring active profile (e.g. prod)
+#   ADMIN_FULL_NAME   – Admin full name
+#   ADMIN_MAIL        – Admin email address
+#   ADMIN_PASSWORD    – Admin password
+#   JWT_SECRET_KEY    – JWT signing secret
+#   JWT_EXPIRATION_TIME – JWT token expiry in ms
+#   REDIS_HOST        – Redis host
+#   REDIS_PORT        – Redis port
 # ============================================================
 
 name: Build and Deploy
@@ -96,5 +106,15 @@ jobs:
             cd /home/ubuntu/app
             tar xzf /home/ubuntu/deploy.tar.gz
             rm /home/ubuntu/deploy.tar.gz
+            export DB_NAME="${{ secrets.DB_NAME }}"
+            export DB_USER="${{ secrets.DB_USER }}"
             export DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+            export ACTIVE_PROFILE="${{ secrets.ACTIVE_PROFILE }}"
+            export ADMIN_FULL_NAME="${{ secrets.ADMIN_FULL_NAME }}"
+            export ADMIN_MAIL="${{ secrets.ADMIN_MAIL }}"
+            export ADMIN_PASSWORD="${{ secrets.ADMIN_PASSWORD }}"
+            export JWT_SECRET_KEY="${{ secrets.JWT_SECRET_KEY }}"
+            export JWT_EXPIRATION_TIME="${{ secrets.JWT_EXPIRATION_TIME }}"
+            export REDIS_HOST="${{ secrets.REDIS_HOST }}"
+            export REDIS_PORT="${{ secrets.REDIS_PORT }}"
             docker compose up --build -d

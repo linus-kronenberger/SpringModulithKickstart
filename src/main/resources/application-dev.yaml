@@ -7,9 +7,9 @@ spring:
   flyway:
     enabled: false
   datasource:
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: password
+    url: ${DB_URL:jdbc:h2:mem:mydb}
+    username: ${DB_USER:sa}
+    password: ${DB_PASSWORD:password}
     driverClassName: org.h2.Driver
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
@@ -20,6 +20,14 @@ spring:
   cache:
     type:
       simple
+admin:
+  full-name: ${ADMIN_FULL_NAME:Admin}
+  email: ${ADMIN_MAIL:admin@admin.com}
+  password: ${ADMIN_PASSWORD:admin}
+security:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY:=3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b}
+    expiration-time: ${JWT_EXPIRATION_TIME:3600000}
 springdoc:
   swagger-ui:
     enabled: true
