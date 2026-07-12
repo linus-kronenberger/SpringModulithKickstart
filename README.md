@@ -347,7 +347,7 @@ On the vps, you can access the endpoints by following this path naming pattern: 
 ## Contributing
 
 This is **my** personal Spring Boot preconfiguration.  
-If you see a useful tool or architecture improvement that fits in here – **feel free to open an issue or submit a PR 🤔😃**!
+If you see a useful tool or architecture improvement that fits in here (or if you simply spot mistakes ) – **feel free to open an issue or submit a PR 🤔😃**
 
 ## Linting
 ```bash
