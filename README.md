@@ -1,18 +1,12 @@
 # Spring Modulith Kickstart
 
-## Welcome
-
-This repository is a preconfigured **Spring Modulith** project with a movie review platform as the domain example.  
-[Spring Modulith](https://spring.io/projects/spring-modulith) is a Spring Boot extension that helps structure monolithic applications into logical modules, enforce module boundaries at compile time, and optionally expose module insights at runtime – a pragmatic middle ground between a big ball of mud and microservices.
-
+This repository is a preconfigured **Spring Modulith** (using [Spring Boot Kotlin](https://spring.io/guides/tutorials/spring-boot-kotlin) and maven) project with a movie review platform as the domain example.
 The app is split into three modules: `user`, `movie`, and `review`. Authentication is handled via JWT tokens.
 
 ## Architecture
 
-### Philosophy
-
 This project follows a **Domain-Driven Design (DDD)-inspired architecture**, implemented with **Spring Modulith**.  
-The goal: a monolith with clean, enforceable module boundaries – without the operational complexity of microservices.
+The goal: a monolith with clean, enforceable module boundaries – without the complexity of microservices.
 
 ### Module Structure
 
@@ -20,44 +14,24 @@ Modules reflect the business domains:
 
 ```
 com.example.springmodulithkickstart
-├── user/      @ApplicationModule(type = OPEN)
-├── movie/     (closed – no @ApplicationModule)
-├── review/    (closed – no @ApplicationModule)
+├── user/      @ApplicationModule(type = CLOSED)
+├── movie/     @ApplicationModule(type = CLOSED)
+├── review/    @ApplicationModule(type = CLOSED)
 └── shared/    @ApplicationModule(type = OPEN)
 ```
-
-Each module follows a consistent **Hexagonal Architecture** layout:
-
-```
-<module>/
-  ├── api/               # REST controllers (Presentation Layer)
-  │   ├── dto/           # Request / Response DTOs
-  ├── domain/            # Business logic interfaces + enums
-  └── infrastructure/    # Implementation details
-      ├── db/            # JPA entities
-      ├── mapper/        # Entity-to-DTO mapping (optional)
-      └── ...
-```
-
-- **`user`** and **`shared`** are marked `@ApplicationModule(type = OPEN)` because other modules need to import them (JwtService and Shared Kernel respectively).
-- **`movie`** and **`review`** are closed by default – direct imports between them are not allowed.
-- Communication between closed modules happens exclusively through **Domain Events** (see below).
-
 ### Hexagonal Architecture per Module
 
 Each module is structured inside-out:
 
-| Layer | Contains | Depends on |
-|---|---|---|
-| `api/` | Controllers, DTOs | → `domain/` (interfaces) |
-| `domain/` | Service interfaces, domain enums, events | nothing (pure business logic) |
-| `infrastructure/` | JPA entities, service implementations, mappers | → `domain/` |
+| Layer | Contains |
+|---|---|
+| `api/` | Controllers, DTOs |
+| `domain/` | Service interfaces, domain enums, events |
+| `infrastructure/` | JPA entities, service implementations, mappers |
 
-Controllers only know the service interfaces from `domain/`, never the implementation. This enables swappability and testable architecture.
+### Domain Events 
 
-### Domain Events – Loose Coupling Between Modules
-
-The central architectural principle: **modules communicate via events**, not direct method calls.
+**Modules communicate via events**, not direct method calls!
 
 ```kotlin
 // movie → published
@@ -68,47 +42,34 @@ MovieServiceImpl.publishEvent(MovieCreatedEvent(movieId, title))
 ReviewServiceImpl.onMovieCreated(event: MovieCreatedEvent)
 ```
 
-The `MovieCreatedEvent` lives in the `shared` module (Shared Kernel).  
-`movie` publishes it via Spring `ApplicationEventPublisher`, `review` consumes it with Spring Modulith's `@ApplicationModuleListener`.  
-This avoids a direct dependency between `movie` and `review`.
-
-```
-┌──────────┐  MovieCreatedEvent  ┌──────────┐
-│  movie   │ ──────────────────> │  review  │
-│ (closed) │      (via shared)   │ (closed) │
-└──────────┘                     └──────────┘
-```
-
-### Dependency Graph
-
-```
-user ──> shared  (JwtService interface for security filter)
-movie ──> shared (MovieCreatedEvent)
-review ──> shared (MovieCreatedEvent)
-review ──> movie (implicitly via movieId foreign key – data-only)
-```
-
-Spring Modulith enforces module boundaries at **compile time** and exposes them at **runtime** via the Actuator endpoint `/admin/actuator/modulith` as JSON.
+Via the ApplicationEventPublisher, the MovieCreatedEvent informs the ReviewModule that a new film has been added, triggering the creation of a review for every user. This serves as an example for the event communication.
 
 ### Libraries
 
-| Concern | Library | Rationale |
-|---|---|---|
-| **Module Architecture** | [Spring Modulith](https://spring.io/projects/spring-modulith) 2.1.0 | Enforces module boundaries, provides runtime insights, supports application events |
-| **Build Tool** | Maven | Spring ecosystem standard, excellent module test integration |
-| **Language** | Kotlin 2.3.21 | Type-safe, expressive, null-safe – ideal for DDD entities |
-| **REST API** | Spring Web (Servlet stack) | Proven, wide community, simple controllers |
-| **Database (dev)** | H2 (in-memory) | Lightweight, no external service needed |
-| **Database (prod)** | PostgreSQL 17 (via Docker) | Production standard, robust, open source |
-| **JPA / ORM** | Spring Data JPA + Hibernate | Standard ORM, `@Entity`, `@CreationTimestamp`, etc. |
-| **Migrations** | Flyway (prod only) | Versioned SQL migrations, declarative and safe |
-| **Security** | Spring Security + JJWT (0.11.5) | JWT-based authentication, role-based (USER / ADMIN) |
-| **API Documentation** | SpringDoc OpenAPI 2.8.6 | Swagger UI at `/admin/swagger/`, OpenAPI JSON at `/admin/api-docs` |
-| **Caching (dev)** | Spring Cache (ConcurrentMapCacheManager) | Simple, no infrastructure needed |
-| **Caching (prod)** | Spring Cache + Redis 7 | Distributed cache, ideal for production |
-| **Testing** | MockK (instead of Mockito) | Kotlin-native mocking library, compatible with Spring Boot |
-| **Linting** | Spotless Maven Plugin | Enforced code style, automatic via `mvn spotless:apply` |
-| **Deployment** | Docker + Docker Compose | Self-contained containers for app, PostgreSQL, and Redis |
+**Web & API**
+- **Spring Web** (Servlet stack) – REST API
+- **SpringDoc OpenAPI 2.8.6** – Swagger UI at `/admin/swagger/`, OpenAPI JSON at `/admin/api-docs`
+
+**Database & Persistence**
+- **H2** (in-memory) – Development database
+- **PostgreSQL 17** (via Docker) – Production database
+- **Spring Data JPA + Hibernate** – ORM layer
+- **Flyway** (prod only) – Versioned SQL migrations
+
+**Security**
+- **Spring Security + JJWT 0.11.5** – JWT-based authentication with role-based access (USER / ADMIN)
+
+**Caching**
+- **ConcurrentMapCacheManager** (dev) – Simple in-memory cache
+- **Redis 7** (prod) – Distributed cache via Docker
+
+**Testing & Quality**
+- **MockK** – Kotlin-native mocking (replaces Mockito)
+- **Spotless Maven Plugin** – Code style enforcement (`mvn spotless:apply` / `mvn spotless:check`)
+
+**Architecture & Deployment**
+- **Spring Modulith** – Module boundary enforcement, runtime insights via Actuator
+- **Docker + Docker Compose** – Containerized deployment of app, PostgreSQL, and Redis
 
 ### Profiles
 
@@ -117,16 +78,16 @@ Spring profiles switch between development and production:
 | Aspect | `dev` (default) | `prod` |
 |---|---|---|
 | Database | H2 in-memory | PostgreSQL |
-| Migrations | `data.sql` (disabled) | Flyway (V1__init.sql) |
 | Caching | ConcurrentMap | Redis |
-| Activation | automatic (default) | `SPRING_PROFILES_ACTIVE=prod`
+
+## Generated Admin Account
 
 | Field    | Value             |
 |----------|-------------------|
 | Email    | admin@admin.com   |
 | Password | admin             |
 
-The admin account is automatically created on startup via `AdminInitializer`.
+The admin account is automatically created on startup via `AdminInitializer`. You can change the default values by adjusting the startup environment variables.
 
 ## Role System
 
@@ -272,7 +233,7 @@ This endpoint returns the module structure including module and aggregate mappin
 
 The pipeline (`.github/workflows/deploy.yml`) automatically builds and deploys to your VPS on every push to `main` or `production`.
 
-### 1. SSH Key
+### 1. SSH Key Set-Up
 
 Generate a key pair on your local machine (if you don't have one yet):
 
@@ -317,34 +278,30 @@ No Java or manual container setup needed – everything runs in Docker container
 
 ### 3. GitHub Secrets
 
-| Secret | Value |
-|--------|-------|
-| `VPS_HOST` | Public IP of your VPS |
-| `VPS_PORT` | `22` |
-| `VPS_USER` | `ubuntu` |
-| `VPS_SSH_KEY` | Content of the **private** key file (e.g. `~/.ssh/vps_deploy`) |
-| `DB_PASSWORD` | PostgreSQL password (used for both the DB container and the app) |
+Navigate to **GitHub → Settings → Secrets and variables → Actions** and add the following secrets.  
+All secrets are **required for production** — the defaults are only suitable for local development.
 
-### 4. Done
+| Secret | Description |
+|--------|-------------|
+| `VPS_HOST` | Public IP of your VPS |
+| `VPS_PORT` | SSH port (usually `22`) |
+| `VPS_USER` | SSH user (e.g. `ubuntu`) |
+| `VPS_SSH_KEY` | Content of the private SSH key (e.g. `~/.ssh/vps_deploy`) |
+| `DB_USER` | PostgreSQL user |
+| `DB_NAME` | PostgreSQL database name |
+| `DB_PASSWORD` | PostgreSQL password |
+| `ACTIVE_PROFILE` | Spring active profile (`prod`) |
+| `ADMIN_MAIL` | Admin account email |
+| `ADMIN_PASSWORD` | Admin account password |
+| `JWT_SECRET_KEY` | Base64-encoded HMAC-SHA256 key for JWT signing |
+| `JWT_EXPIRATION_TIME` | JWT token validity in milliseconds (e.g. `3600000` = 1 hour) |
+| `REDIS_HOST` | Redis hostname (Docker service name: `redis`) |
+| `REDIS_PORT` | Redis port (usually `6379`) |
+
+### 4. Finish Deployment
 
 Push to `main` – the pipeline runs `spotless:check`, builds the JAR, packages it with `Dockerfile` and `docker-compose.yml`, copies the archive to your VPS, and runs `docker compose up --build -d`.  
 PostgreSQL data persists across deploys via a Docker volume (`postgres_data`).
-
-### Useful VPS Commands
-
-```bash
-# View app logs
-ssh ubuntu@<VPS_IP> "docker compose -f /home/ubuntu/app/docker-compose.yml logs -f"
-
-# Restart app manually
-ssh ubuntu@<VPS_IP> "cd /home/ubuntu/app && docker compose restart app"
-
-# Stop everything
-ssh ubuntu@<VPS_IP> "cd /home/ubuntu/app && docker compose down"
-
-# Check container status
-ssh ubuntu@<VPS_IP> "docker ps"
-```
 
 ## Testing
 
