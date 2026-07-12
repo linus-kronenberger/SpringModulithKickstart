@@ -258,10 +258,10 @@ chown deploy:deploy /home/deploy/app
 
 ### 2. SSH Key Set-Up
 
-Generate a key pair on your local machine (if you don't have one yet):
+Generate an Ed25519 key pair on your local machine:
 
 ```bash
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/vps_deploy
+ssh-keygen -t ed25519 -C "github-actions" -f ~/.ssh/vps_deploy -N ""
 ```
 
 This creates `~/.ssh/vps_deploy` (private key) and `~/.ssh/vps_deploy.pub` (public key).  
@@ -272,7 +272,7 @@ The **private key** will later be stored as `VPS_SSH_KEY` in GitHub Secrets.
 From your local machine:
 
 ```bash
-sudo ssh-copy-id -i ~/.ssh/vps_deploy.pub deploy@<VPS_IP>
+ssh-copy-id -i ~/.ssh/vps_deploy.pub deploy@<VPS_IP>
 ```
 
 If that doesn't work (e.g. `deploy` user has no password), log in as `root` and manually add the key:
@@ -295,17 +295,34 @@ ssh -i ~/.ssh/vps_deploy deploy@<VPS_IP>
 
 Successful login → you're ready.
 
-### 5. GitHub Secrets
+### 5. GitHub Environment & Secrets
 
-Navigate to **GitHub → Settings → Secrets and variables → Actions** and add the following secrets.  
-All secrets are **required for production** — the defaults are only suitable for local development.
+The `deploy` job in the pipeline references an environment called `deploy environment`. Secrets must be stored there, not at the repo level.
+
+#### 5.1 Create the Environment
+
+1. **GitHub → Repo → Settings → Environments → New environment**
+2. Name: `deploy environment`
+3. **Save**
+
+#### 5.2 Add Secrets
+
+In the new environment, under **Environment secrets**, add the following:
+
+Copy your private key to the clipboard:
+
+```bash
+cat ~/.ssh/vps_deploy | pbcopy
+```
+
+Then click **"Add secret"** and paste the value.
 
 | Secret | Description |
 |--------|-------------|
 | `VPS_HOST` | Public IP of your VPS |
 | `VPS_PORT` | SSH port (usually `22`) |
 | `VPS_USER` | SSH user (e.g. `deploy`) |
-| `VPS_SSH_KEY` | Content of the private SSH key (e.g. `~/.ssh/vps_deploy`) |
+| `VPS_SSH_KEY` | Full content of `~/.ssh/vps_deploy` (including `-----BEGIN OPENSSH PRIVATE KEY-----` / `-----END OPENSSH PRIVATE KEY-----`) |
 | `DB_USER` | PostgreSQL user |
 | `DB_NAME` | PostgreSQL database name |
 | `DB_PASSWORD` | PostgreSQL password |
@@ -318,9 +335,9 @@ All secrets are **required for production** — the defaults are only suitable f
 | `REDIS_HOST` | Redis hostname (Docker service name: `redis`) |
 | `REDIS_PORT` | Redis port (usually `6379`) |
 
-### 4. Finish Deployment
+### 6. Deployment
 
-Push to `main` – the pipeline runs `spotless:check`, builds the JAR, packages it with `Dockerfile` and `docker-compose.yml`, copies the archive to your VPS, and runs `docker compose up --build -d`.  
+Push to `main` – the pipeline runs `spotless:check`, tests, builds the JAR, copies it with `Dockerfile` and `docker-compose.yml` to your VPS, and runs `docker compose up --build -d`.  
 PostgreSQL data persists across deploys via a Docker volume (`postgres_data`).
 
 ## Testing
